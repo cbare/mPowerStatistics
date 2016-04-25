@@ -12,7 +12,6 @@
 
 tappingCountStatistic<-function(tapping) {
 	d1<-ShapeTappingData(tapping)
-	print(d1)
 	d2<-CleanTappedButtonNone(d1)
 	nrow(d2)
 }
