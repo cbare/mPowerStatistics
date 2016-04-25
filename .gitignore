@@ -23,3 +23,5 @@ vignettes/*.pdf
 
 #eclipse file
 .project
+
+..Rcheck
