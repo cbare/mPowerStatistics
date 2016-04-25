@@ -1,0 +1,19 @@
+\.travis\.yml
+\.project
+\.gitignore
+\.dockerignore
+\.DS_Store
+\.\.Rcheck
+
+# can't figure out how to make .Rbuildignore ignore .git/
+.git
+\.git
+^.git
+^\.git
+
+.git/**
+\.git/**
+^.git/**
+^\.git/**
+
+
