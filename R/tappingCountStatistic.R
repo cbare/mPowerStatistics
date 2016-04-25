@@ -3,13 +3,13 @@
 # Input is the json from Bridge Exporter, converted into an R
 # object by RJSONIO.
 #
-# Output is ??????
+# Output is number of taps
 # 
 # Author: bhoff
 ###############################################################################
 
 
 
-tappingCountStatistic<-function() {
-	stop("Not yet implemented.")
+tappingCountStatistic<-function(t) {
+	length(t)
 }
