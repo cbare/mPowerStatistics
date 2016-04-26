@@ -3,6 +3,25 @@ library(RJSONIO)
 
 context("testBalance_zcrAA")
 
+## test the zero-crossing-rate function
+testZCR <- function(x, expected) {
+  expect_equal(ZCR(x), expected)
+}
+
+testZCR(numeric(length=0), NA)
+testZCR(c(1.1), NA)
+testZCR(c(1,1,1,1), 0.0)
+testZCR(c(1,2,2,2), 1/3)
+testZCR(c(1,2,1,1), 2/3)
+testZCR(c(1,2,1,2), 1.0)
+testZCR(c(1,2,1,2,1,2), 1.0)
+testZCR(c(1,1,1,1,1,2,2,2,2,2,2), 0.1)
+
+## 4 crossings, 401 data points
+testZCR(cos(seq(0,4*pi, pi/100)), 0.01)
+
+
+## test using permuted JSON data files with these record IDs
 recordIds=c(
   '0dcb75f3-4b4c-4ede-884c-e04a1a8b97b4',
   '14d57715-275b-4a0c-a804-0b2b59abd9bd',
@@ -51,6 +70,6 @@ testDataFolder <- system.file("testdata/walking", package="mPowerStatistics")
 paths <- file.path(testDataFolder, sprintf('deviceMotion_walking_rest_%s.json', recordIds))
 
 for (i in seq(along=paths)) {
-  expect_equal(expected_zcrAA[i], balance_zcrAA(fromJSON(paths[i])), tolerance=1e-7)
+  expect_equal(balance_zcrAA(fromJSON(paths[i])), expected_zcrAA[i], tolerance=1e-7)
 }
 
