@@ -7,4 +7,5 @@ Author: Bruce Hoff
 Maintainer: Bruce Hoff <bruce.hoff@sagebase.org>
 Description: This is the set of statistics used to process mPower data.
 License: What license is it under?
-Imports:  RJSONIO
+Imports: RJSONIO, lomb
+Suggests: testthat
