@@ -10,7 +10,7 @@ gait_F0XY <- function(gait_data_from_json) {
   t <- dat[, "timestamp"]
 
   ## Lomb-Scargle Periodogram from package lomb
-  lspXY <- lsp(cbind(t, y), plot = FALSE)
+  lspXY <- lomb::lsp(cbind(t, y), plot = FALSE)
   F0XY <- lspXY$peak.at[1]
   return(F0XY)
 }
