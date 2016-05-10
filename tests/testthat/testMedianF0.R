@@ -4,6 +4,23 @@ context("testMedianF0")
 
 run_in_docker <- grepl('Darwin',Sys.info()['sysname']) && Sys.info()['user']=='CBare'
 
+## test swipep
+if (run_in_docker) {
+  docker_conf <- 'eval "$(docker-machine env default)"'
+  cmd <- paste(docker_conf,
+               sprintf('docker run octave -q test_swipep.m 2>&1'),
+               sep=';')
+} else {
+  cmd <- sprintf('cd %s; octave -q test_swipep.m 2>&1',
+                 system.file("octave", package="mPowerStatistics"))
+}
+
+output <- system(cmd, intern=TRUE)
+if ('status' %in% names(attributes(output)) && attributes(output)$status > 0) {
+  cat(output)
+  stop("test_swipep failed")
+}
+
 recordIds <- c(
   '03246007-b2f0-4e49-adb6-6281c7d5cb53',
   '0fb00aae-6d05-44ef-b379-94ae37131dbf',
