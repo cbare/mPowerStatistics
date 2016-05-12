@@ -26,6 +26,7 @@ medianF0 <- function(filepath, run_in_docker=FALSE) {
   output <- system(cmd, intern=TRUE)
 
   if ('status' %in% names(attributes(output)) && attributes(output)$status > 0) {
+    message(output)
     NA_real_
   } else {
     as.numeric(output)
@@ -59,6 +60,7 @@ convert_to_wav <- function(filepath, run_in_docker=FALSE) {
   output <- system(cmd, intern=TRUE)
 
   if ('status' %in% names(attributes(output)) && attributes(output)$status > 0) {
+    message(output)
     NA
   } else {
     target_filepath

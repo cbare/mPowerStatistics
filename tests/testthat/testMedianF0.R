@@ -67,7 +67,9 @@ testDataFolder <- system.file("testdata/voice", package="mPowerStatistics")
 paths <- file.path(testDataFolder, sprintf('voice_%s.m4a', recordIds))
 
 for (i in seq(along=paths)) {
-  expect_equal(medianF0(convert_to_wav(paths[i], run_in_docker=run_in_docker), run_in_docker=run_in_docker), expected_medianF0[i], tolerance=1.0)
+  message("computing medianF0 for: ", paths[i], file.exists(paths[i]))
+  expect_equal(medianF0(convert_to_wav(paths[i], run_in_docker=run_in_docker), run_in_docker=run_in_docker),
+               expected_medianF0[i], tolerance=1.0)
 }
 
 ## cleanup .wav files

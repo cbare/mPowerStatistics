@@ -1,11 +1,13 @@
-language: r
+sudo: required
 
-cache: packages
+language: ruby
 
-warnings_are_errors: false
+services:
+ - docker
 
 before_install:
-  - sudo apt-get -qq update
-  - sudo apt-get install -y octave octave-signal
+ - docker build -t sagebionetworks/mpower-statistics .
 
-                
+script:
+ # Now run the tests.
+ - docker run -w /mPowerStatistics/tests sagebionetworks/mpower-statistics bash -c "R --no-save < /mPowerStatistics/tests/testthat.R"

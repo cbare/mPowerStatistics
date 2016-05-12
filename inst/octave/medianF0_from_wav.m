@@ -1,3 +1,5 @@
+pkg load signal
+
 % given a .wav file on the command line, compute median F0
 args = argv();
 wav_file = args{1};
