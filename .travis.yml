@@ -1,8 +1,11 @@
-language: r
+sudo: required
 
-cache: packages
+services:
+ - docker
 
-warnings_are_errors: false
+before_install:
+ - docker build -t sagebionetworks/mpower-statistics .
 
-
-                
+script:
+ # Now run the tests.
+ - docker run -w /mPowerStatistics/tests sagebionetworks/mpower-statistics bash -c "R --no-save < /mPowerStatistics/tests/testthat.R"
