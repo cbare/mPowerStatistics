@@ -2,25 +2,16 @@ library(testthat)
 
 context("testMedianF0")
 
-run_in_docker <- grepl('Darwin',Sys.info()['sysname']) && Sys.info()['user']=='CBare'
-
-## test swipep
-if (run_in_docker) {
-  docker_conf <- 'eval "$(docker-machine env default)"'
-  cmd <- paste(docker_conf,
-               sprintf('docker run octave -q test_swipep.m 2>&1'),
-               sep=';')
-} else {
-  cmd <- sprintf('cd %s; octave -q test_swipep.m 2>&1',
-                 system.file("octave", package="mPowerStatistics"))
-}
+message('\n\nTest swipep.m')
+cmd <- sprintf('cd %s; octave -q test_swipep.m 2>&1',
+               system.file("octave", package="mPowerStatistics"))
 
 output <- system(cmd, intern=TRUE)
 if ('status' %in% names(attributes(output)) && attributes(output)$status > 0) {
-  cat(output)
-  stop("test_swipep failed")
+  stop(output)
 }
 
+message('\n\nTest deriving medianF0 from voice files')
 recordIds <- c(
   '03246007-b2f0-4e49-adb6-6281c7d5cb53',
   '0fb00aae-6d05-44ef-b379-94ae37131dbf',
@@ -67,27 +58,25 @@ testDataFolder <- system.file("testdata/voice", package="mPowerStatistics")
 paths <- file.path(testDataFolder, sprintf('voice_%s.m4a', recordIds))
 
 for (i in seq(along=paths)) {
-  expect_equal(medianF0(convert_to_wav(paths[i], run_in_docker=run_in_docker), run_in_docker=run_in_docker),
+  expect_equal(medianF0(convert_to_wav(paths[i])),
                expected_medianF0[i], tolerance=1.0)
 }
 
 ## cleanup .wav files
 file.remove(file.path(testDataFolder, sprintf('voice_%s.wav', recordIds)))
 
-## try processing a bad .m4a file
+message("\n\nTry processing a bad .m4a file:")
 filepath <- file.path(testDataFolder, "bad.m4a")
 f1 <- file(filepath, "wb")
 writeBin(rep(0,1024), f1)
 close(f1)
-expect_warning(fn <- convert_to_wav(filepath, run_in_docker=run_in_docker))
-expect_true(is.na(fn))
+expect_error(convert_to_wav(filepath))
 file.remove(filepath)
 
-## try processing a bad .wav file
+message("\n\nTry processing a bad .wav file:")
 filepath <- file.path(testDataFolder, "bad.wav")
 f2 <- file(filepath, "wb")
 writeBin(rep(0,1024), f2)
 close(f2)
-expect_warning(f0m <- medianF0(filepath, run_in_docker=run_in_docker))
-expect_true(is.na(f0m))
+expect_error(medianF0(filepath))
 file.remove(filepath)
